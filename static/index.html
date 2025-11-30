@@ -179,6 +179,8 @@
                 if (event.persisted) {
                     const loader = document.getElementById('loadingIndicator');
                     loader.style.display = 'none';
+                    const btn = document.getElementById('submitBtn');
+                    btn.disabled = false;
 
                     document.getElementById("captcha").value = "";
                 }
