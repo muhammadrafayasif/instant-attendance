@@ -1,0 +1,6 @@
+fastapi
+httpx
+upstash-redis
+python-dotenv
+uvicorn
+python-multipart

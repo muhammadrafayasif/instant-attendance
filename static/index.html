@@ -1,0 +1,195 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NEDUET Instant Attendance</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f2f2f2;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* GitHub banner */
+            .github-banner {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                background-color: #24292e;
+                text-align: center;
+                padding: 5px 0;
+                font-weight: bold;
+                font-size: 0.9em;
+                z-index: 1000;
+            }
+            .github-banner a {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+            /* Login container */
+            .login-container {
+                background-color: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                width: 90%;
+                max-width: 400px;
+                box-sizing: border-box;
+                margin-top: 40px; /* leave space for banner */
+            }
+
+            /* Form headings */
+            h2 {
+                text-align: center;
+                margin-bottom: 20px;
+                color: #333;
+                font-size: 1.5em;
+            }
+
+            /* Labels and inputs */
+            label {
+                display: block;
+                margin-top: 10px;
+                font-weight: bold;
+                font-size: 0.9em;
+            }
+            input {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                font-size: 1em;
+                box-sizing: border-box;
+            }
+            input[type="submit"] {
+                background-color: #fe0000;
+                color: white;
+                margin-top: 20px;
+                border: none;
+                cursor: pointer;
+                padding: 12px;
+                font-size: 1em;
+                border-radius: 5px;
+            }
+            input[type="submit"]:hover {
+                background-color: #7e0000;
+            }
+
+            /* CAPTCHA image */
+            .captcha img {
+                margin-top: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                max-width: 100%;
+                height: auto;
+                cursor: pointer;
+            }
+
+            /* Processing/loading indicator */
+            .processing-screen {
+                display: none;
+                margin-top: 20px;
+                padding: 15px;
+                background-color: #ffeaea;
+                border: 1px solid #fe0000;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: bold;
+                color: #fe0000;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .processing-content {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                font-size: 1em;
+            }
+
+            /* Mobile adjustments */
+            @media (max-width: 480px) {
+                .login-container {
+                    padding: 20px;
+                }
+                h2 {
+                    font-size: 1.3em;
+                }
+                input, input[type="submit"] {
+                    font-size: 1em;
+                    padding: 10px;
+                }
+                label {
+                    font-size: 0.85em;
+                }
+}
+
+        </style>
+    </head>
+    <body>
+
+        <!-- GitHub banner -->
+        <div class="github-banner">
+            <a href="https://github.com/muhammadrafayasif/instant-attendance" target="_blank">
+                <img width="20px" src="https://cdn.worldvectorlogo.com/logos/github-icon-2.svg" />
+                View this project on GitHub
+            </a>
+        </div>
+
+        <!-- Login form container -->
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="loginForm" action="/attendance" method="post" onsubmit="showLoading()">
+                <label>UserID:</label>
+                <input type="text" name="userID" required>
+
+                <label>Password:</label>
+                <input type="password" name="password" required>
+
+                <label>CAPTCHA:</label>
+                <img id="captchaImg" src="/captcha" alt="Captcha" style="cursor:pointer;" onclick="reloadCaptcha()">
+
+                <label>Enter CAPTCHA:</label>
+                <input type="text" name="captcha" id="captcha" required>
+
+                <input type="submit" value="Login" id="submitBtn">
+
+                <!-- Loading indicator -->
+                <div id="loadingIndicator" class="processing-screen">
+                    <div class="processing-content">
+                        <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading" width="30" style="margin-right:10px;">
+                        <span>Processing your request...</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            window.addEventListener("pageshow", function(event) {
+                if (event.persisted) {
+                    const loader = document.getElementById('loadingIndicator');
+                    loader.style.display = 'none';
+
+                    document.getElementById("captcha").value = "";
+                }
+            });
+
+            function showLoading() {
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = true;
+                const loader = document.getElementById('loadingIndicator');
+                loader.style.display = 'block';
+            }
+        </script>
+    </body>
+</html>

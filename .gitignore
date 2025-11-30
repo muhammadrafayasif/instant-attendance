@@ -1,0 +1,5 @@
+# Environment variable
+.env
+
+# Cache files
+api/__pycache__
