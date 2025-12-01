@@ -3,6 +3,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NEDUET Instant Attendance</title>
         <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png">
+        
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WC22R69L43"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-WC22R69L43');
+        </script>
+
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -157,7 +168,7 @@
                 <input type="password" name="password" required>
 
                 <label>CAPTCHA:</label>
-                <img id="captchaImg" src="/captcha" alt="Captcha" style="cursor:pointer;" onclick="reloadCaptcha()">
+                <img id="captchaImg" src="/captcha" alt="Captcha">
 
                 <label>Enter CAPTCHA:</label>
                 <input type="text" name="captcha" id="captcha" required>
@@ -178,8 +189,11 @@
             window.addEventListener("pageshow", function(event) {
                 if (event.persisted) {
                     const loader = document.getElementById('loadingIndicator');
-                    loader.style.display = 'none';
                     const btn = document.getElementById('submitBtn');
+                    const captcha = document.getElementById('captchaImg');
+
+                    captcha.src = '/captcha?' + new Date().getTime();
+                    loader.style.display = 'none';
                     btn.disabled = false;
 
                     document.getElementById("captcha").value = "";
