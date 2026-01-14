@@ -1,6 +1,5 @@
-from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi import FastAPI, Form, HTTPException, Response, Request
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 import dotenv, httpx, os, json
 
 dotenv.load_dotenv()
@@ -13,11 +12,13 @@ PDF = os.getenv("PDF")
 SESSION_ID = os.getenv("SESSION_ID")
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-@app.get("/", response_class=HTMLResponse)
-def form_page():
-    return FileResponse("static/index.html")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "https://neduet-result-notifier.vercel.app"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/captcha")
 async def get_captcha():
@@ -31,10 +32,6 @@ async def get_captcha():
         response = Response(content=captcha_res.content, media_type="image/png")
         response.set_cookie(SESSION_ID, session_id, max_age=300)
         return response
-
-@app.get("/attendance", response_class=HTMLResponse)
-async def redirect():
-    return RedirectResponse("/")
 
 @app.post("/attendance")
 async def login(
@@ -59,7 +56,7 @@ async def login(
 
         pdf_res = await client.get(PDF % userID)
 
-    if pdf_res.status_code != 200:
-        raise HTTPException(status_code=500, detail="Could not fetch PDF D:")
+    if not pdf_res.content:
+        raise HTTPException(status_code=404, detail="Can't find attendance D:")
 
     return Response(content=pdf_res.content, media_type="application/pdf")

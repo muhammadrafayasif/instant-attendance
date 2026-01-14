@@ -1,0 +1,163 @@
+html,
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  min-height: 100dvh;
+  background: url("https://pl.neduet.edu.pk/images/bgimg.jpeg");
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.captcha-container {
+  width: 100%;
+  margin-bottom: 5px;
+  height: min-content;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    to bottom,
+    #ff0000 0%,
+    #ff0000 2%,
+    black 50%,
+    #ff0000 99%,
+    #ff0000 100%
+  );
+}
+
+.github-banner {
+  background-color: #1a1e22;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  width: 90%;
+  max-width: 480px;
+  border-radius: 8px;
+  margin: 4px;
+}
+
+.github-banner a {
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.github-banner img {
+  width: 30px;
+  height: 30px;
+}
+
+.form {
+  background: #ffffff;
+  padding: 20px;
+  width: 90%;
+  max-width: 480px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.form h2 {
+  margin-bottom: 10px;
+  color: #1f2933;
+}
+
+.form p {
+  margin-bottom: 20px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #374151;
+}
+
+.form input,
+.form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form input:focus,
+.form select:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.form button {
+  width: 100%;
+  padding: 12px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+.form button:hover:not(:disabled) {
+  background: rgb(193, 0, 0);
+}
+
+.status-message {
+  margin-top: 5px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 4px 4px;
+}
+
+.status-message.success {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #34d399;
+}
+
+.status-message.error {
+  background-color: #fef2f2;
+  color: #7f1d1d;
+  border: 1px solid #f87171;
+}
+
+.status-message.loading {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #60a5fa;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
