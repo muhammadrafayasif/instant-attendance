@@ -31,11 +31,14 @@ const Form = () => {
       formBody.append("password", formData.password);
       formBody.append("captcha", formData.captcha);
 
-      const response = await fetch("http://localhost:8000/attendance", {
-        method: "POST",
-        credentials: "include",
-        body: formBody,
-      });
+      const response = await fetch(
+        "https://neduet-attendance-backend.vercel.app/attendance",
+        {
+          method: "POST",
+          credentials: "include",
+          body: formBody,
+        }
+      );
 
       if (!response.ok) {
         const text = await response.json();
@@ -98,7 +101,10 @@ const Form = () => {
 
         <label>CAPTCHA</label>
         <div className="captcha-container">
-          <img src="http://localhost:8000/captcha" alt="Image Code"></img>
+          <img
+            src="https://neduet-attendance-backend.vercel.app/captcha"
+            alt="Image Code"
+          ></img>
         </div>
         <input
           type="captcha"
