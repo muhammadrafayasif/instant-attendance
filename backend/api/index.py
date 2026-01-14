@@ -14,7 +14,7 @@ SESSION_ID = os.getenv("SESSION_ID")
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://neduet-attendance.vercel.app"],
+    allow_origins=["http://localhost:5173", "https://ned-attendance.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
