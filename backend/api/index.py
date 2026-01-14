@@ -30,7 +30,7 @@ async def get_captcha():
             raise HTTPException(status_code=500, detail="Could not retrieve JSESSIONID")
 
         response = Response(content=captcha_res.content, media_type="image/png")
-        response.set_cookie(SESSION_ID, session_id, max_age=300)
+        response.set_cookie(SESSION_ID, session_id, max_age=300, samesite="none", secure=True)
         return response
 
 @app.post("/attendance")
