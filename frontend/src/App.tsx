@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 const Form = () => {
@@ -9,10 +9,32 @@ const Form = () => {
   });
 
   const [status, setStatus] = useState("idle");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [captchaUrl, setCaptchaUrl] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCaptcha() {
+      setLoading(true);
+
+      const res = await fetch("https://ned-attendance.vercel.app/captcha", {
+        credentials: "omit",
+      });
+
+      const token: any = res.headers.get("X-Session-Token");
+      const blob = await res.blob();
+
+      setCaptchaToken(token);
+      setCaptchaUrl(URL.createObjectURL(blob));
+      setLoading(false);
+    }
+
+    loadCaptcha();
+  }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setFormData({
       ...formData,
@@ -23,21 +45,22 @@ const Form = () => {
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("loading");
-    setMessage("");
+    setMessage("Fetching attendance");
 
     try {
       const formBody = new FormData();
+      formBody.append("token", captchaToken || "");
       formBody.append("userID", formData.userID);
       formBody.append("password", formData.password);
       formBody.append("captcha", formData.captcha);
 
       const response = await fetch(
-        "https://neduet-attendance-backend.vercel.app/attendance",
+        "https://ned-attendance.vercel.app/attendance",
         {
           method: "POST",
           credentials: "include",
           body: formBody,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -65,14 +88,11 @@ const Form = () => {
         onClick={() =>
           window.open(
             "https://github.com/muhammadrafayasif/instant-attendance",
-            "_blank"
+            "_blank",
           )
         }
       >
-        <img
-          src="https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png"
-          alt="GitHub Logo"
-        />
+        <img src="/github.png" alt="GitHub" />
         View on GitHub
       </div>
       <form className="form" onSubmit={handleForm}>
@@ -101,10 +121,11 @@ const Form = () => {
 
         <label>CAPTCHA</label>
         <div className="captcha-container">
-          <img
-            src="https://neduet-attendance-backend.vercel.app/captcha"
-            alt="Image Code"
-          ></img>
+          {captchaLoading ? (
+            <img src="/loading.gif" height={25}></img>
+          ) : (
+            <img src={captchaUrl || "/error.png"} height={25}></img>
+          )}
         </div>
         <input
           type="captcha"
@@ -115,9 +136,7 @@ const Form = () => {
           placeholder="Enter CAPTCHA"
         />
 
-        <button type="submit">
-          {status === "loading" ? "Fetching..." : "Login"}
-        </button>
+        <button type="submit">Login</button>
 
         {message && <div className={`status-message ${status}`}>{message}</div>}
       </form>
