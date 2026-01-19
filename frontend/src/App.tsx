@@ -18,9 +18,12 @@ const Form = () => {
     async function loadCaptcha() {
       setLoading(true);
 
-      const res = await fetch("https://ned-attendance.vercel.app/captcha", {
-        credentials: "omit",
-      });
+      const res = await fetch(
+        "https://neduet-attendance-backend.vercel.app/captcha",
+        {
+          credentials: "omit",
+        },
+      );
 
       const token: any = res.headers.get("X-Session-Token");
       const blob = await res.blob();
@@ -55,7 +58,7 @@ const Form = () => {
       formBody.append("captcha", formData.captcha);
 
       const response = await fetch(
-        "https://ned-attendance.vercel.app/attendance",
+        "https://neduet-attendance-backend.vercel.app/attendance",
         {
           method: "POST",
           credentials: "include",
