@@ -28,7 +28,7 @@ app.add_middleware(
 
 @app.get("/captcha")
 async def get_captcha():
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=None) as client:
         captcha_res = await client.get(CAPTCHA)
         session_id = captcha_res.cookies.get(SESSION_ID)
 
@@ -50,12 +50,14 @@ async def login(
     captcha: str = Form(...)
 ):
     SESSION = redis.get(token)
+    if isinstance(SESSION, bytes):
+        SESSION = SESSION.decode()
     REQUEST_DATA = json.loads(REQUEST % (userID, password, captcha))
 
     if not SESSION:
         raise HTTPException(status_code=400, detail="Session expired :(")
     
-    async with httpx.AsyncClient(follow_redirects=True) as client:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=None) as client:
         client.cookies.set(SESSION_ID, SESSION)
 
         login_res = await client.post(PORTAL, data=REQUEST_DATA)
@@ -69,3 +71,7 @@ async def login(
         raise HTTPException(status_code=404, detail="Can't find attendance D:")
 
     return Response(content=pdf_res.content, media_type="application/pdf")
+
+@app.get("/health")
+def health():
+    return {"ok": True}

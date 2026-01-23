@@ -18,18 +18,22 @@ const Form = () => {
     async function loadCaptcha() {
       setLoading(true);
 
-      const res = await fetch(
-        "https://neduet-attendance-backend.vercel.app/captcha",
-        {
-          credentials: "omit",
-        },
-      );
+      try {
+        const res = await fetch(
+          "https://neduet-attendance-backend.vercel.app/captcha",
+          {
+            credentials: "omit",
+          },
+        );
 
-      const token: any = res.headers.get("X-Session-Token");
-      const blob = await res.blob();
+        const token: any = res.headers.get("X-Session-Token");
+        const blob = await res.blob();
 
-      setCaptchaToken(token);
-      setCaptchaUrl(URL.createObjectURL(blob));
+        setCaptchaToken(token);
+        if (token) setCaptchaUrl(URL.createObjectURL(blob));
+      } catch (err: any) {
+        console.error(err);
+      }
       setLoading(false);
     }
 
