@@ -13,6 +13,9 @@ type CacheStatusResponse = {
 };
 
 const Form = () => {
+  const isAndroid =
+    typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+
   const [formData, setFormData] = useState({
     userID: "",
     password: "",
@@ -23,6 +26,7 @@ const Form = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [cacheNotice, setCacheNotice] = useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfRemoteUrl, setPdfRemoteUrl] = useState<string | null>(null);
   const [captchaUrl, setCaptchaUrl] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [captchaLoading, setLoading] = useState(true);
@@ -183,6 +187,9 @@ const Form = () => {
       const cacheKey = response.headers.get("X-PDF-Cache-Key") || formData.userID;
       const blob = await response.blob();
       setPdfBlob(blob);
+      setPdfRemoteUrl(
+        `${API_BASE}/attendance/cache/${encodeURIComponent(cacheKey)}`,
+      );
 
       stopPolling();
       currentPdfHashRef.current = pdfHash;
@@ -275,7 +282,31 @@ const Form = () => {
 
           <div className="pdf-frame">
             {pdfUrl ? (
-              <iframe title="Attendance PDF" src={pdfUrl} />
+              isAndroid ? (
+                <div className="pdf-mobile-actions">
+                  <p>
+                    PDF preview is limited on some browsers. Use the
+                    button below to open it directly.
+                  </p>
+                  <a
+                    className="pdf-action-btn"
+                    href={pdfRemoteUrl || pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open PDF
+                  </a>
+                  <a
+                    className="pdf-action-btn secondary"
+                    href={pdfRemoteUrl || pdfUrl}
+                    download="attendance.pdf"
+                  >
+                    Download PDF
+                  </a>
+                </div>
+              ) : (
+                <iframe title="Attendance PDF" src={pdfUrl} />
+              )
             ) : (
               <div className="pdf-placeholder">
                 Your attendance PDF will appear here after login.

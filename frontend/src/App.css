@@ -219,6 +219,35 @@ body {
   color: #526074;
 }
 
+.pdf-mobile-actions {
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 24px;
+  color: #374151;
+}
+
+.pdf-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #b91c1c, #ef4444);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pdf-action-btn.secondary {
+  background: #1f2937;
+}
+
 @media (min-width: 901px) {
   .container {
     justify-content: center;
@@ -282,7 +311,8 @@ body {
   .viewer-panel,
   .pdf-frame,
   .pdf-frame iframe,
-  .pdf-placeholder {
+  .pdf-placeholder,
+  .pdf-mobile-actions {
     min-height: 520px;
   }
 }
@@ -304,7 +334,8 @@ body {
   .viewer-panel,
   .pdf-frame,
   .pdf-frame iframe,
-  .pdf-placeholder {
+  .pdf-placeholder,
+  .pdf-mobile-actions {
     min-height: 460px;
   }
 }
