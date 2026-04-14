@@ -1,10 +1,16 @@
 html,
 body {
   margin: 0;
+  min-height: 100%;
 }
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  color: #132238;
 }
 
 .container {
@@ -12,9 +18,8 @@ body {
   background: url("https://pl.neduet.edu.pk/images/bgimg.jpeg");
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 16px;
   align-items: center;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .captcha-container {
@@ -36,17 +41,23 @@ body {
 }
 
 .github-banner {
-  background-color: #1a1e22;
+  background: #1b1f23;
   cursor: pointer;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 15px 10px;
-  width: 90%;
-  max-width: 480px;
-  border-radius: 8px;
-  margin: 4px;
+  width: 100%;
+  border-radius: 18px;
+  margin: 0 0 16px;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.github-banner:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.22);
 }
 
 .github-banner a {
@@ -62,23 +73,32 @@ body {
   height: 30px;
 }
 
-.form {
-  background: #ffffff;
-  padding: 20px;
+.content-grid {
   width: 90%;
-  max-width: 480px;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.form {
+  background: white;
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.14);
 }
 
 .form h2 {
   margin-bottom: 10px;
-  color: #1f2933;
+  color: #10203a;
+  font-size: 1.75rem;
+  line-height: 1.1;
 }
 
 .form p {
   margin-bottom: 20px;
-  color: #4b5563;
+  color: #526074;
   font-size: 14px;
 }
 
@@ -92,45 +112,49 @@ body {
 .form input,
 .form select {
   width: 100%;
-  padding: 10px;
+  padding: 12px 14px;
   margin-bottom: 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 14px;
+  font-size: 15px;
+  background: rgba(248, 250, 252, 0.95);
 }
 
 .form input:focus,
 .form select:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.12);
 }
 
 .form button {
   width: 100%;
   padding: 12px;
-  background: red;
+  background: linear-gradient(135deg, #b91c1c, #ef4444);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 14px;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .form button:disabled {
-  background: gray;
+  background: #94a3b8;
   cursor: not-allowed;
 }
 
 .form button:hover:not(:disabled) {
-  background: rgb(193, 0, 0);
+  transform: translateY(-1px);
+  filter: saturate(1.05);
 }
 
 .status-message {
-  margin-top: 5px;
+  margin-top: 12px;
   text-align: center;
-  border-radius: 6px;
-  padding: 4px 4px;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 14px;
 }
 
 .status-message.success {
@@ -151,6 +175,94 @@ body {
   border: 1px solid #60a5fa;
 }
 
+.viewer-panel {
+  min-height: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cache-note {
+  background: rgba(15, 23, 42, 0.92);
+  color: #f8fafc;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.2);
+  font-size: 14px;
+}
+
+.pdf-frame {
+  flex: 1;
+  min-height: 640px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.14);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.pdf-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  min-height: 640px;
+  background: white;
+}
+
+.pdf-placeholder {
+  min-height: 640px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: #526074;
+}
+
+@media (min-width: 901px) {
+  .container {
+    justify-content: center;
+  }
+
+  .content-grid {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .content-grid {
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+  }
+
+  .form,
+  .viewer-panel {
+    width: 100%;
+  }
+
+  .form {
+    text-align: center;
+  }
+
+  .github-banner {
+    justify-content: center;
+  }
+
+  .form label,
+  .cache-note,
+  .pdf-placeholder {
+    text-align: center;
+  }
+
+  .viewer-panel {
+    align-items: center;
+  }
+
+  .pdf-frame {
+    width: 100%;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -159,5 +271,40 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer-panel,
+  .pdf-frame,
+  .pdf-frame iframe,
+  .pdf-placeholder {
+    min-height: 520px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 14px;
+  }
+
+  .content-grid {
+    width: 100%;
+  }
+
+  .form {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .viewer-panel,
+  .pdf-frame,
+  .pdf-frame iframe,
+  .pdf-placeholder {
+    min-height: 460px;
   }
 }
