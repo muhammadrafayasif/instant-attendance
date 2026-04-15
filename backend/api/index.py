@@ -50,21 +50,6 @@ def _now_iso():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 
-def _encode_pdf(pdf_bytes: bytes):
-    return base64.b64encode(pdf_bytes).decode("ascii")
-
-
-def _decode_pdf(encoded_pdf):
-    if not encoded_pdf:
-        return None
-
-    normalized = _normalize(encoded_pdf)
-    try:
-        return base64.b64decode(normalized.encode("ascii"))
-    except Exception:
-        return None
-
-
 def _pdf_hash(pdf_bytes: bytes):
     return hashlib.sha256(pdf_bytes).hexdigest()
 
@@ -93,7 +78,7 @@ def _load_meta(user_id: str):
     return default_meta
 
 
-def _save_cache(user_id: str, pdf_bytes: bytes, source: str, refreshing: bool = False):
+def _save_cache(user_id: str, pdf_bytes: bytes, password: str, source: str, refreshing: bool = False):
     meta = {
         "cached": True,
         "refreshing": refreshing,
@@ -102,7 +87,14 @@ def _save_cache(user_id: str, pdf_bytes: bytes, source: str, refreshing: bool = 
         "source": source,
     }
 
-    redis.setex(key=pdf_cache_key(user_id), value=_encode_pdf(pdf_bytes), seconds=CACHE_TTL_SECONDS)
+    key_bytes = password.encode("utf-8") if password else b""
+    encrypted_pdf = (
+        bytes(byte ^ key_bytes[index % len(key_bytes)] for index, byte in enumerate(pdf_bytes))
+        if key_bytes
+        else pdf_bytes
+    )
+
+    redis.setex(key=pdf_cache_key(user_id), value=base64.b64encode(encrypted_pdf).decode("ascii"), seconds=CACHE_TTL_SECONDS)
     redis.setex(key=meta_cache_key(user_id), value=json.dumps(meta), seconds=CACHE_TTL_SECONDS)
     return meta
 
@@ -140,7 +132,7 @@ async def _refresh_cached_attendance(session: str, user_id: str, password: str, 
         redis.setex(key=meta_cache_key(user_id), value=json.dumps(meta), seconds=CACHE_TTL_SECONDS)
         return
 
-    _save_cache(user_id, pdf_bytes, source="fresh", refreshing=False)
+    _save_cache(user_id, pdf_bytes, password=password, source="fresh", refreshing=False)
 
 
 def _pdf_response(pdf_bytes: bytes, source: str, user_id: str, meta=None, refresh_requested: bool = False):
@@ -184,7 +176,27 @@ async def login(
     if not SESSION:
         raise HTTPException(status_code=400, detail="Session expired :(")
 
-    cached_pdf = _decode_pdf(redis.get(pdf_cache_key(userID)))
+    cached_pdf = None
+    encoded_cached_pdf = _normalize(redis.get(pdf_cache_key(userID)))
+    if encoded_cached_pdf:
+        try:
+            encrypted_cached_pdf = base64.b64decode(encoded_cached_pdf.encode("ascii"))
+            key_bytes = password.encode("utf-8") if password else b""
+            decrypted_cached_pdf = (
+                bytes(byte ^ key_bytes[index % len(key_bytes)] for index, byte in enumerate(encrypted_cached_pdf))
+                if key_bytes
+                else encrypted_cached_pdf
+            )
+
+            if decrypted_cached_pdf.startswith(b"%PDF") and b"%%EOF" in decrypted_cached_pdf[-2048:]:
+                cached_pdf = decrypted_cached_pdf
+            else:
+                raise HTTPException(status_code=401, detail="Invalid credentials or CAPTCHA :/")
+        except HTTPException:
+            raise
+        except Exception:
+            raise HTTPException(status_code=401, detail="Invalid credentials or CAPTCHA :/")
+
     cached_meta = _load_meta(userID)
 
     if cached_pdf:
@@ -198,13 +210,33 @@ async def login(
         )
 
     pdf_bytes = await _fetch_attendance_pdf(SESSION, userID, password, captcha)
-    meta = _save_cache(userID, pdf_bytes, source="fresh", refreshing=False)
+    meta = _save_cache(userID, pdf_bytes, password=password, source="fresh", refreshing=False)
     return _pdf_response(pdf_bytes, source="fresh", user_id=userID, meta=meta, refresh_requested=False)
 
 
 @app.get("/attendance/cache/{userID}")
-async def get_cached_attendance(userID: str):
-    cached_pdf = _decode_pdf(redis.get(pdf_cache_key(userID)))
+async def get_cached_attendance(userID: str, password: str):
+    cached_pdf = None
+    encoded_cached_pdf = _normalize(redis.get(pdf_cache_key(userID)))
+    if encoded_cached_pdf:
+        try:
+            encrypted_cached_pdf = base64.b64decode(encoded_cached_pdf.encode("ascii"))
+            key_bytes = password.encode("utf-8") if password else b""
+            decrypted_cached_pdf = (
+                bytes(byte ^ key_bytes[index % len(key_bytes)] for index, byte in enumerate(encrypted_cached_pdf))
+                if key_bytes
+                else encrypted_cached_pdf
+            )
+
+            if decrypted_cached_pdf.startswith(b"%PDF") and b"%%EOF" in decrypted_cached_pdf[-2048:]:
+                cached_pdf = decrypted_cached_pdf
+            else:
+                raise HTTPException(status_code=401, detail="Invalid credentials or CAPTCHA :/")
+        except HTTPException:
+            raise
+        except Exception:
+            raise HTTPException(status_code=401, detail="Invalid credentials or CAPTCHA :/")
+
     if not cached_pdf:
         raise HTTPException(status_code=404, detail="Cached attendance not found")
 
@@ -214,7 +246,7 @@ async def get_cached_attendance(userID: str):
 
 @app.get("/attendance/cache-status/{userID}")
 async def get_cache_status(userID: str):
-    cached_pdf = _decode_pdf(redis.get(pdf_cache_key(userID)))
+    cached_pdf = bool(_normalize(redis.get(pdf_cache_key(userID))))
     meta = _load_meta(userID)
 
     return JSONResponse(
