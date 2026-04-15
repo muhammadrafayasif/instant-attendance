@@ -8,7 +8,8 @@ The official portal makes it difficult to view your attendance without downloadi
 - Python
 - FastAPI
 - httpx
-- Vercel (For deployment)
+- Upstash Redis
+- Vercel
 
 ## Installation
 1. Clone the repository
@@ -40,6 +41,9 @@ Simply login to the portal using the ID and password you use in the official por
 - The application logs in for you from the official portal
 - Through the home page, It accesses the attendance PDF
 - It serves it to you through the browser
+
+>[!NOTE]
+>Your attendance PDF will be cached server side using Upstash Redis for instant returns, and it will be updated with the source attendance once fetch is complete!
 
 Thats it!
 
