@@ -88,7 +88,7 @@ const Form = () => {
 
         if (cacheStatus.hash && cacheStatus.hash !== currentPdfHashRef.current) {
           const refreshedPdfRes = await fetch(
-            `${API_BASE}/attendance/cache/${encodeURIComponent(userID)}`,
+            `${API_BASE}/attendance/cache/${encodeURIComponent(userID)}?password=${encodeURIComponent(formData.password)}`,
           );
 
           if (!refreshedPdfRes.ok) {
@@ -188,7 +188,7 @@ const Form = () => {
       const blob = await response.blob();
       setPdfBlob(blob);
       setPdfRemoteUrl(
-        `${API_BASE}/attendance/cache/${encodeURIComponent(cacheKey)}`,
+        `${API_BASE}/attendance/cache/${encodeURIComponent(cacheKey)}?password=${encodeURIComponent(formData.password)}`,
       );
 
       stopPolling();
