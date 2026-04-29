@@ -42,9 +42,6 @@ Simply login to the portal using the ID and password you use in the official por
 - Through the home page, It accesses the attendance PDF
 - It serves it to you through the browser
 
->[!NOTE]
->Your attendance PDF will be cached server side using Upstash Redis for instant returns, and it will be updated with the source attendance once fetch is complete!
-
 Thats it!
 
 # License
