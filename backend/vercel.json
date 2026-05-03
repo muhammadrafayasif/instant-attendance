@@ -7,37 +7,4 @@
     { "src": "/api/(.*)", "dest": "api/index.py" },
     { "src": "/(.*)", "dest": "api/index.py" }
   ]
-  ,
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0" }
-      ]
-    },
-    {
-      "source": "/*.png",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0" }
-      ]
-    },
-    {
-      "source": "/*.gif",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0" }
-      ]
-    },
-    {
-      "source": "/*.css",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0" }
-      ]
-    },
-    {
-      "source": "/*.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0" }
-      ]
-    }
-  ]
 }

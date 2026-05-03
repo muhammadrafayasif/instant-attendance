@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Form, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import dotenv, httpx, json, os, uuid, upstash_redis
 
 dotenv.load_dotenv()
@@ -8,6 +9,12 @@ redis = upstash_redis.Redis(
     url=os.getenv("REDIS_URL"),
     token=os.getenv("REDIS_TOKEN")
 )
+
+class LoginData(BaseModel):
+    token: str
+    userID: str
+    password: str
+    captcha: str
 
 # Load environment variables
 CAPTCHA = os.getenv("CAPTCHA")
@@ -23,9 +30,8 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["X-Session-Token", "X-PDF-Source", "X-PDF-Hash", "X-PDF-Updated-At", "X-PDF-Cache-Key", "X-PDF-Refresh-Requested"]
+    expose_headers=["X-Session-Token"]
 )
-
 
 @app.get("/captcha")
 async def get_captcha():
@@ -45,13 +51,10 @@ async def get_captcha():
 
 @app.post("/attendance")
 async def login(
-    token: str = Form(...),
-    userID: str = Form(...),
-    password: str = Form(...),
-    captcha: str = Form(...)
+    data: LoginData
 ):
-    SESSION = redis.get(token)
-    REQUEST_DATA = json.loads(REQUEST % (userID, password, captcha))
+    SESSION = redis.get(data.token)
+    REQUEST_DATA = json.loads(REQUEST % (data.userID, data.password, data.captcha))
 
     if not SESSION:
         raise HTTPException(status_code=400, detail="Session expired :(")
@@ -64,7 +67,7 @@ async def login(
         if b"Please provide correct" in login_res.content:
             raise HTTPException(status_code=401, detail="Invalid credentials or CAPTCHA :/")
 
-        pdf_res = await client.get(PDF % userID)
+        pdf_res = await client.get(PDF % data.userID)
 
     if not pdf_res.content:
         raise HTTPException(status_code=404, detail="Can't find attendance D:")

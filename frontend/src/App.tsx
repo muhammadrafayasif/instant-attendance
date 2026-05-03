@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+const getRandomNumber = (): number => {
+  return Math.floor(Math.random() * 2) + 1;
+};
+
 const Form = () => {
   const [formData, setFormData] = useState({
     userID: "",
@@ -9,6 +13,7 @@ const Form = () => {
   });
 
   const [status, setStatus] = useState("idle");
+  const [randomizedGIF] = useState(getRandomNumber());
   const [message, setMessage] = useState<string | null>(null);
   const [captchaUrl, setCaptchaUrl] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -39,7 +44,7 @@ const Form = () => {
   useEffect(() => {
     // Preload the loading GIF
     const img = new Image();
-    img.src = "/search.gif";
+    img.src = `/searching${randomizedGIF}.gif`;
   }, []);
 
   const handleChange = (
@@ -57,18 +62,20 @@ const Form = () => {
     setMessage("Fetching attendance");
 
     try {
-      const formBody = new FormData();
-      formBody.append("token", captchaToken || "");
-      formBody.append("userID", formData.userID);
-      formBody.append("password", formData.password);
-      formBody.append("captcha", formData.captcha);
-
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/attendance`,
         {
           method: "POST",
           credentials: "include",
-          body: formBody,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            token: captchaToken || "",
+            userID: formData.userID,
+            password: formData.password,
+            captcha: formData.captcha
+          }),
         },
       );
 
@@ -149,8 +156,11 @@ const Form = () => {
 
         {
           status === "loading" && (
-            <img alt="Fetching your attendance..." src="/search.gif" height={150} style={{ marginTop: 20, display: "block", marginLeft: "auto", marginRight: "auto" }}/>
-          )
+          <>
+            <p style={{ marginTop: 20, color: "darkorange", textAlign: "center" }}>Searching for your attendance...</p>
+            <img alt="Fetching your attendance..." src={`/searching${randomizedGIF}.gif`} height={150} style={{ marginTop: 20, display: "block", marginLeft: "auto", marginRight: "auto" }}/>
+          </>
+        )
         }
 
         {
