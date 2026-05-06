@@ -32,7 +32,28 @@ const PdfViewer = ({ pdfUrl }: { pdfUrl: string }) => {
           setPageNumber(1);
         }}
         onLoadError={(error) => console.error("PDF load error:", error)}
-        loading={<p>Loading PDF...</p>}
+        loading={
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                border: "4px solid #f3f3f3",
+                borderTop: "4px solid #ffcc00",
+                borderRadius: "50%",
+                width: "40px",
+                height: "40px",
+                animation: "spin 1s linear infinite",
+              }}
+            />
+          </div>
+        }
       >
         <Page
           pageNumber={pageNumber}
@@ -93,7 +114,7 @@ const Form = () => {
   const loadCaptcha = async () => {
     setLoading(true);
 
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/captcha`, {
+    const res = await fetch(`/api/captcha`, {
       credentials: "omit",
     });
 
@@ -141,7 +162,7 @@ const Form = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/attendance`,
+        `/api/attendance`,
         {
           method: "GET",
           credentials: "include",
