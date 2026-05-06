@@ -57,7 +57,7 @@ html, body {
   width: 90%;
   max-width: 480px;
   border-radius: 16px;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
 }
@@ -221,7 +221,9 @@ html, body {
 .pdf-toolbar-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
 }
 
 .pdf-toolbar p {
@@ -231,19 +233,21 @@ html, body {
 }
 
 .back-button, .open-button {
-  width: auto;
-  min-width: 150px;
-  padding: 11px 16px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #990000 0%, #1a1a1a 100%);
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #990000;
   color: #ffffff;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .back-button:hover, .open-button:hover {
   cursor: pointer;
+  background: #b30000;
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(255, 0, 0, 0.24);
 }
 
 .pdf-frame {

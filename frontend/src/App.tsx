@@ -145,7 +145,7 @@ const Form = () => {
             )
           }
         >
-          <img src="/github.webp" alt="GitHub" />
+          <img src="/github.webp" alt="GH" />
           View on GitHub
         </div>
       )}
@@ -155,7 +155,7 @@ const Form = () => {
           <div className="pdf-toolbar">
             <div className="pdf-toolbar-left">
               <button type="button" className="back-button" onClick={handleBackToLogin}>
-                Back to login
+                Go Back
               </button>
               <button type="button" className="open-button" onClick={() => window.open(pdfUrl || "", "_blank")}>
                 Open PDF
@@ -171,7 +171,7 @@ const Form = () => {
         </section>
       ) : (
         <form className="form" onSubmit={handleForm}>
-          <h2>NEDUET Instant Attendance</h2>
+          <h2>NED Instant Attendance</h2>
           <p>Login to your undergraduate portal to view your attendance.</p>
 
           <label>Student ID</label>
