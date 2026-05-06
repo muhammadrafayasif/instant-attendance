@@ -1,20 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+
 html, body {
   margin: 0;
+  min-height: 100%;
+  background: #0a0a0a;
 }
 
 * {
   box-sizing: border-box;
-  transition: all 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .container {
   min-height: 100dvh;
-  background: url("https://pl.neduet.edu.pk/images/bgimg.jpeg");
+  background:
+    radial-gradient(circle at top, rgba(255, 0, 0, 0.14), transparent 34%),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 22%),
+    linear-gradient(160deg, #ff0000 0%, #4b0000 45%, #111 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 24px 16px;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 .captcha-container {
@@ -37,28 +45,31 @@ html, body {
 }
 
 .github-banner {
-  background-color: #1a1e22;
+  background: rgba(8, 14, 25, 0.82);
+  backdrop-filter: blur(10px);
   cursor: pointer;
-  color: white;
+  color: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px 10px;
+  gap: 10px;
+  padding: 14px 12px;
   width: 90%;
   max-width: 480px;
-  border-radius: 8px;
-  margin: 4px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  margin: 0 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
 }
 
 .github-banner:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .github-banner a {
   text-decoration: none;
-  color: white;
+  color: inherit;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -70,48 +81,55 @@ html, body {
 }
 
 .form {
-  background: #ffffff;
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 28px;
   width: 90%;
   max-width: 480px;
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.42);
 }
 
 .form h2 {
   margin-bottom: 10px;
-  color: #1f2933;
+  color: #0f172a;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
 }
 
 .form p {
   margin-bottom: 20px;
-  color: #4b5563;
-  font-size: 14px;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .form label {
   display: block;
   margin-bottom: 6px;
-  font-weight: bold;
-  color: #374151;
+  font-weight: 600;
+  color: #1e293b;
 }
 
 .form input,
 .form select {
   width: 100%;
-  padding: 10px;
+  padding: 12px 14px;
   margin-bottom: 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #d6dbe6;
+  border-radius: 14px;
+  font-size: 0.98rem;
+  font-family: inherit;
+  background: #f8fafc;
+  color: #0f172a;
 }
 
 .form input:focus,
 .form select:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
 
 .form button {
@@ -120,11 +138,11 @@ html, body {
   background: #990000;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 14px rgba(255, 0, 0, 0.35);
+  box-shadow: 0 14px 28px rgba(29, 78, 216, 0.32);
 }
 
 .form button:disabled {
@@ -134,7 +152,6 @@ html, body {
 }
 
 .form button:hover:not(:disabled) {
-  background: rgb(193, 0, 0);
   transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(255, 0, 0, 0.45);
 }
@@ -147,10 +164,11 @@ html, body {
 .status-message {
   margin-top: 5px;
   text-align: center;
-  border-radius: 6px;
-  padding: 4px 4px;
+  border-radius: 14px;
+  padding: 10px 12px;
   animation: fadeIn 0.3s ease;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  font-weight: 600;
 }
 
 .status-message.success {
@@ -166,9 +184,69 @@ html, body {
 }
 
 .status-message.loading {
-  background-color: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #60a5fa;
+  background-color: #fffbef;
+  color: orange;
+  border: 1px solid #fac460;
+}
+
+.loading-illustration {
+  margin-top: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+}
+
+.pdf-shell {
+  width: min(1100px, 100%);
+  min-height: calc(100dvh - 48px);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pdf-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pdf-toolbar p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.back-button {
+  width: auto;
+  min-width: 150px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #990000 0%, #1a1a1a 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
+}
+
+.back-button:hover {
+  cursor: pointer;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(255, 0, 0, 0.24);
+}
+
+.pdf-frame {
+  width: 100%;
+  flex: 1;
+  min-height: 70dvh;
+  border: 1px solid #d6dbe6;
+  border-radius: 18px;
+  background: #fff;
 }
 
 @keyframes fadeIn {
