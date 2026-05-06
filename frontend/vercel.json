@@ -5,6 +5,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "${VITE_BACKEND_URL}/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
