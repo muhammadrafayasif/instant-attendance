@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { ArrowBigLeft, FolderOpen } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -103,6 +104,7 @@ const Form = () => {
   const [captchaLoading, setLoading] = useState(true);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const pdfUrlRef = useRef<string | null>(null);
+  const [mode, setMode] = useState<"attendance" | "transcript">("attendance");
 
   const revokePdfUrl = () => {
     if (pdfUrlRef.current) {
@@ -116,6 +118,9 @@ const Form = () => {
 
     const res = await fetch(`/api/captcha`, {
       credentials: "omit",
+      headers: {
+        "x-vercel-protection-bypass": "iO1IHNaVbjHLHgeiYrINy7wePHSq3JTo",
+      }
     });
 
     const token = res.headers.get("X-Session-Token");
@@ -157,21 +162,23 @@ const Form = () => {
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setViewState("loading");
-    setMessage("Fetching attendance");
+    setMessage(`Fetching ${mode}`);
     revokePdfUrl();
 
     try {
       const response = await fetch(
-        `/api/attendance`,
+        `/api/fetch`,
         {
           method: "GET",
           credentials: "include",
           headers: {
+            "x-vercel-protection-bypass": "iO1IHNaVbjHLHgeiYrINy7wePHSq3JTo",
             "Content-Type": "application/json",
             "X-Token": captchaToken || "",
             "X-User-Id": formData.userID,
             "X-Password": formData.password,
             "X-Captcha": formData.captcha,
+            "X-Type": mode,
           },
         }
       );
@@ -222,7 +229,7 @@ const Form = () => {
           }
         >
           <img src="/github.webp" alt="GH" />
-          View on GitHub
+          Star on GitHub
         </div>
       )}
 
@@ -235,28 +242,42 @@ const Form = () => {
                 className="back-button"
                 onClick={handleBackToLogin}
               >
-                Go Back
+                <ArrowBigLeft size={18} />
               </button>
               <button
                 type="button"
                 className="open-button"
                 onClick={() => window.open(pdfUrl || "", "_blank")}
               >
-                Open PDF
+                <FolderOpen size={18} />
               </button>
             </div>
-            <p>Attendance PDF is loaded below.</p>
           </div>
 
           <PdfViewer pdfUrl={pdfUrl || ""} />
         </section>
       ) : (
         <form className="form" onSubmit={handleForm}>
-          <h5 style={{ textAlign: "center", color: "blue", fontSize: "0.875rem", margin: "0 0 0.5rem 0", border: "2px solid blue", borderRadius: "6px", padding: "0.5rem" }}>
-            Coming Soon: Instant Transcript
-          </h5>
-          <h2 style={{ textAlign: "center" }}>NED Instant Attendance</h2>
-          <p>Login to your undergraduate portal to view your attendance.</p>
+          {viewState !== "loading" && (
+            <div className="mode-switch" style={{ justifyContent: "center", marginBottom: "0.5rem" }}>
+              <span className="mode-label">Attendance</span>
+              <label className="switch" aria-label="Toggle mode">
+                <input
+                  type="checkbox"
+                  role="switch"
+                aria-checked={mode === "transcript"}
+                checked={mode === "transcript"}
+                onChange={(e) => setMode(e.target.checked ? "transcript" : "attendance")}
+              />
+              <span className="track">
+                <span className="thumb" />
+              </span>
+            </label>
+            <span className="mode-label">Transcript</span>
+          </div>)}
+
+          <h2 style={{ textAlign: "center" }}>{mode === "transcript" ? "NED Instant Transcript" : "NED Instant Attendance"}</h2>
+          <p>{mode === "transcript" ? "Login to your undergraduate portal to view your transcript." : "Login to your undergraduate portal to view your attendance."}</p>
 
           <label>Student ID</label>
           <input
@@ -316,7 +337,7 @@ const Form = () => {
           {viewState === "loading" && (
             <>
               <p className="status-message loading">
-                Searching for your attendance...
+                {`Searching for your ${mode}...`}
               </p>
               <video
                 src={`/searching${randomizedVal}.mp4`}

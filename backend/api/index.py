@@ -1,14 +1,9 @@
-from fastapi import FastAPI, Form, HTTPException, Header, Response
+from fastapi import FastAPI, HTTPException, Header, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import dotenv, httpx, json, os, uuid, upstash_redis
+import dotenv, httpx, json, os
 
 dotenv.load_dotenv()
-
-redis = upstash_redis.Redis(
-    url=os.getenv("REDIS_URL"),
-    token=os.getenv("REDIS_TOKEN")
-)
 
 class LoginData(BaseModel):
     token: str
@@ -21,6 +16,8 @@ CAPTCHA = os.getenv("CAPTCHA")
 PORTAL = os.getenv("PORTAL")
 REQUEST = os.getenv("REQUEST")
 PDF = os.getenv("PDF")
+TRANSCRIPT = os.getenv("TRANSCRIPT")
+CODE = os.getenv("CODE")
 SESSION_ID = os.getenv("SESSION_ID")
 
 app = FastAPI()
@@ -42,28 +39,19 @@ async def get_captcha():
         if not session_id:
             raise HTTPException(status_code=500, detail="Could not retrieve SESSION ID")
 
-        token = str(uuid.uuid4())
-        redis.setex(key=token, value=session_id, seconds=300)
-
         response = Response(content=captcha_res.content, media_type="image/png")
-        response.headers["X-Session-Token"] = token
+        response.headers["X-Session-Token"] = session_id
         return response
 
-@app.get("/attendance")
+@app.get("/fetch")
 async def login(
     x_token: str = Header(...),
     x_user_id: str = Header(...),
     x_password: str = Header(...),
     x_captcha: str = Header(...),
+    x_type: str = Header(...)
 ):
     try:
-        SESSION = redis.get(x_token)
-
-        if not SESSION:
-            raise HTTPException(
-                status_code=400,
-                detail="Session expired :("
-            )
 
         REQUEST_DATA = json.loads(
             REQUEST % (x_user_id, x_password, x_captcha)
@@ -74,7 +62,7 @@ async def login(
             timeout=30.0
         ) as client:
 
-            client.cookies.set(SESSION_ID, SESSION)
+            client.cookies.set(SESSION_ID, x_token)
 
             login_res = await client.post(
                 PORTAL,
@@ -85,20 +73,35 @@ async def login(
                 raise HTTPException(
                     status_code=401,
                     detail="Invalid credentials or CAPTCHA :/"
-                )
-
-            pdf_res = await client.get(PDF % x_user_id)
-
-        if not pdf_res.content:
-            raise HTTPException(
-                status_code=404,
-                detail="Can't find attendance D:"
             )
 
-        return Response(
-            content=pdf_res.content,
-            media_type="application/pdf"
-        )
+            if x_type == "attendance":
+                pdf_res = await client.get(PDF % x_user_id)
+                if pdf_res.headers.get("Content-Length") == "0":
+                    raise HTTPException(
+                        status_code=404,
+                        detail="Can't find attendance D:"
+                    )
+
+                return Response(
+                    content=pdf_res.content,
+                    media_type="application/pdf"
+                )
+        
+            elif x_type == "transcript":
+                exam_id = login_res.text.split(CODE)[-1].split('"')[0]
+                transcript_res = await client.get(TRANSCRIPT % (x_user_id, exam_id))
+
+                if transcript_res.status_code == 401:
+                    raise HTTPException(
+                        status_code=401,
+                        detail="Session expired :/"
+                    )
+
+                return Response(
+                    content=transcript_res.content,
+                    media_type="application/pdf"
+                )
 
     except httpx.TimeoutException:
         raise HTTPException(

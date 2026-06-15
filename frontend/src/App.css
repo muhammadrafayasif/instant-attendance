@@ -278,3 +278,138 @@ html, body {
     transform: rotate(360deg);
   }
 }
+
+/* Mode toggle (Attendance / Transcript) */
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  margin-bottom: 0.5rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(15,23,42,0.02), rgba(15,23,42,0.01));
+  width: fit-content;
+}
+
+.mode-toggle label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+  user-select: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+.mode-toggle input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Selected state using :has for parent-aware styling (modern browsers) */
+.mode-toggle label:has(input:checked) {
+  color: #fff;
+  background: linear-gradient(90deg, #ff7a7a 0%, #990000 100%);
+  box-shadow: 0 10px 30px rgba(153, 0, 0, 0.28), 0 2px 6px rgba(0,0,0,0.12) inset;
+  transform: translateY(-2px);
+}
+
+.mode-toggle label:not(:has(input:checked)):hover {
+  transform: translateY(-2px);
+  background: rgba(15,23,42,0.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-toggle label,
+  .mode-toggle label:has(input:checked) {
+    transition: none;
+  }
+}
+
+/* Animated switch for mode selection */
+.mode-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mode-switch .mode-label {
+  font-weight: 700;
+  color: #475569;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.mode-switch .switch {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  width: 68px;
+  height: 36px;
+}
+
+.mode-switch .switch input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.mode-switch .track {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff 0%, #f3f4f6 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 6px 18px rgba(2,6,23,0.18);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: background 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms;
+}
+
+.mode-switch .thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff 0%, #ffefef 100%);
+  box-shadow: 0 6px 18px rgba(175, 11, 11, 0.18), 0 2px 6px rgba(27, 1, 1, 0.12) inset;
+  transform: translateX(0);
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), background 220ms;
+}
+
+.mode-switch .switch input:checked + .track {
+  background: linear-gradient(90deg, #ff7a7a 0%, #990000 100%);
+  box-shadow: 0 10px 28px rgba(153,0,0,0.28), 0 1px 0 rgba(255,255,255,0.06) inset;
+}
+
+.mode-switch .switch input:checked + .track .thumb {
+  transform: translateX(32px);
+  background: linear-gradient(180deg, #ffffff 0%, #ffeeee 100%);
+}
+
+.mode-switch .switch:focus-within .track {
+  box-shadow: 0 0 0 6px rgba(255,204,0,0.11);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-switch .track,
+  .mode-switch .thumb {
+    transition: none;
+  }
+}
