@@ -344,6 +344,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
 }
 
 .mode-switch .mode-label {
@@ -411,5 +414,34 @@ html, body {
   .mode-switch .track,
   .mode-switch .thumb {
     transition: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .mode-switch {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mode-switch .mode-label {
+    font-size: 0.9rem;
+  }
+
+  .mode-switch .switch {
+    width: 60px;
+    height: 32px;
+  }
+
+  .mode-switch .track {
+    padding: 3px;
+  }
+
+  .mode-switch .thumb {
+    width: 26px;
+    height: 26px;
+  }
+
+  .mode-switch .switch input:checked + .track .thumb {
+    transform: translateX(28px);
   }
 }
