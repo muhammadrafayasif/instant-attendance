@@ -1,8 +1,8 @@
-# NEDUET Instant Attendance
-This is a FastAPI based application that simply serves your attendance PDF to your web browser after successful login.
+# NED Attendance | NEDUET Instant Attendance
+An open-source FastAPI application that lets NED University students view their attendance PDF in the browser after signing in. It removes the need to download and rename the file, especially on mobile.
 
 ### Why?
-The official portal makes it difficult to view your attendance without downloading a file and renaming it (Fairly difficult on mobile). This program simply displays your attendance without all the extra work.
+The official portal makes it difficult to view your NED attendance without downloading a file and renaming it. This project displays the attendance directly in your browser without the extra work.
 
 ## Tech Stack
 - Python

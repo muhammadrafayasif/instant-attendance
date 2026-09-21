@@ -229,7 +229,7 @@ const Form = () => {
           }
         >
           <img src="/github.webp" alt="GH" />
-          Star on GitHub
+          Open Source on GitHub
         </div>
       )}
 
@@ -286,7 +286,7 @@ const Form = () => {
             value={formData.userID}
             onChange={handleChange}
             required
-            placeholder="Enter Portal ID"
+            placeholder="Enter Student ID"
           />
 
           {viewState !== "loading" && (

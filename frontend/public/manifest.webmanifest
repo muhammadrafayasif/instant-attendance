@@ -1,6 +1,7 @@
 {
   "name": "NEDUET Instant Attendance",
   "short_name": "NEDUET Attendance",
+  "description": "View NED University attendance online with this free, open-source web application.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
