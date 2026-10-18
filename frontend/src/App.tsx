@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { ArrowBigLeft, FolderOpen } from "lucide-react";
+import { ArrowBigLeft, Eye, EyeOff, FolderOpen } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -105,6 +105,7 @@ const Form = () => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const pdfUrlRef = useRef<string | null>(null);
   const [mode, setMode] = useState<"attendance" | "transcript">("attendance");
+  const [showPassword, setShowPassword] = useState(false);
 
   const revokePdfUrl = () => {
     if (pdfUrlRef.current) {
@@ -276,10 +277,9 @@ const Form = () => {
             <span className="mode-label">Transcript</span>
           </div>)}
 
-          <h2 style={{ textAlign: "center" }}>{mode === "transcript" ? "NED Instant Transcript" : "NED Instant Attendance"}</h2>
-          <p>{mode === "transcript" ? "Login to your undergraduate portal to view your transcript." : "Login to your undergraduate portal to view your attendance."}</p>
+          <h2 style={{ textAlign: "center", margin: "10px" }}>{mode === "transcript" ? "NED Instant Transcript" : "NED Instant Attendance"}</h2>
 
-          <label>Student ID</label>
+          <label>Undergrad Student ID</label>
           <input
             type="username"
             name="userID"
@@ -292,14 +292,25 @@ const Form = () => {
           {viewState !== "loading" && (
             <>
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="Enter Password"
-              />
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter Password"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
 
               <label>CAPTCHA</label>
               <div className="captcha-container">

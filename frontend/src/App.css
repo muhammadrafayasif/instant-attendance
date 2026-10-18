@@ -132,6 +132,41 @@ html, body {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
 
+.password-input-container {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.password-input-container input {
+  margin-bottom: 0;
+  padding-right: 48px;
+}
+
+.form button.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #475569;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.form button.password-toggle:hover:not(:disabled) {
+  transform: translateY(-50%);
+  background: #e2e8f0;
+  color: #0f172a;
+  box-shadow: none;
+}
+
 .form button {
   width: 100%;
   padding: 12px;
