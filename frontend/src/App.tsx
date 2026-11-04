@@ -8,7 +8,7 @@ import "./App.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const getRandomNumber = (): number => {
-  return Math.floor(Math.random() * 2) + 1;
+  return Math.floor(Math.random() * 4) + 1;
 };
 
 type ViewState = "login" | "loading" | "pdf";
@@ -97,7 +97,7 @@ const Form = () => {
   });
 
   const [viewState, setViewState] = useState<ViewState>("login");
-  const [randomizedVal] = useState(getRandomNumber());
+  const [randomizedVal, setRandomizedVal] = useState(getRandomNumber());
   const [message, setMessage] = useState<string | null>(null);
   const [captchaUrl, setCaptchaUrl] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -120,6 +120,7 @@ const Form = () => {
     const res = await fetch(`/api/captcha`, {
       credentials: "omit",
       headers: {
+        // This may look like some lost environment variable, but theres not much you can do with this :/ sorry
         "x-vercel-protection-bypass": "iO1IHNaVbjHLHgeiYrINy7wePHSq3JTo",
       }
     });
@@ -209,6 +210,7 @@ const Form = () => {
     setPdfUrl(null);
     setViewState("login");
     setMessage(null);
+    setRandomizedVal(getRandomNumber())
     setFormData({
       userID: "",
       password: "",
@@ -230,7 +232,7 @@ const Form = () => {
           }
         >
           <img src="/github.webp" alt="GH" />
-          Open Source on GitHub
+          View on GitHub
         </div>
       )}
 
@@ -277,7 +279,7 @@ const Form = () => {
             <span className="mode-label">Transcript</span>
           </div>)}
 
-          <h2 style={{ textAlign: "center", margin: "10px" }}>{mode === "transcript" ? "NED Instant Transcript" : "NED Instant Attendance"}</h2>
+          <h2 style={{ textAlign: "center", margin: "20px" }}>{mode === "transcript" ? "NED Instant Transcript" : "NED Instant Attendance"}</h2>
 
           <label>Undergrad Student ID</label>
           <input
@@ -322,10 +324,11 @@ const Form = () => {
                   />
                 ) : (
                   <img
-                    src={captchaUrl || "/error.png"}
+                    src={captchaUrl ?? "/error.png"}
                     height={25}
                     alt="CAPTCHA"
                     onClick={() => loadCaptcha()}
+                    onError={() => setCaptchaUrl("/error.png")}
                     style={{ cursor: "pointer" }}
                   />
                 )}
