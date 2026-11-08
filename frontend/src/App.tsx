@@ -279,7 +279,7 @@ const Form = () => {
             <span className="mode-label">Transcript</span>
           </div>)}
 
-          <h2 style={{ textAlign: "center", margin: "20px" }}>{mode === "transcript" ? "NED Instant Transcript" : "NED Instant Attendance"}</h2>
+          <h2 style={{ textAlign: "center", margin: "20px" }}>{mode === "transcript" ? "NED Fetch Transcript" : "NED Fetch Attendance"}</h2>
 
           <label>Undergrad Student ID</label>
           <input
