@@ -2,6 +2,9 @@ name: Frontend Deployment CI/CD
 on:
   push:
     branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy_backend.yml'
 
 jobs:
   deploy:
