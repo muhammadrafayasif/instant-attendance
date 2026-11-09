@@ -12,5 +12,12 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://nedfetch.ddns.net/$1",
+      "permanent": true
+    }
   ]
 }
