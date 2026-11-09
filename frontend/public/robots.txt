@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ned-attendance.vercel.app/sitemap.xml
+Sitemap: https://nedfetch.ddns.net/sitemap.xml
