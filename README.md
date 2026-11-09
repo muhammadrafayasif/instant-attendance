@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="frontend/public/favicon.png" height="100px" /> <br/>
+    <img src="frontend/public/favicon.png" height="200px" /> <br/>
 </p>
 
 # NED Fetch
@@ -10,27 +10,30 @@ An open-source FastAPI application that lets NED University students view their 
 The official portal makes it difficult to view your NED attendance without downloading a file and renaming it. This project displays the attendance directly in your browser without the extra work.
 
 ## Tech Stack
-<img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" title="Python" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/fastapi/009688" alt="FastAPI" title="FastAPI" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/react/61DAFB" alt="React.js" title="React.js" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/vite/9135FF" alt="VITE" title="VITE" height="40" />
-&nbsp;&nbsp;
+<p align="center">
+    <img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" title="Python" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/fastapi/009688" alt="FastAPI" title="FastAPI" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/react/61DAFB" alt="React.js" title="React.js" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/vite/9135FF" alt="VITE" title="VITE" height="40" />
+    &nbsp;&nbsp;
+</p>
 
 ## Deployment Stack
-
-<img src="https://companieslogo.com/img/orig/ORCL-d5a587ae.png?t=1740130451" alt="Oracle Cloud" title="Oracle Cloud" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/ubuntu/E95420" alt="Ubuntu" title="Ubuntu" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/linux/FCC624" alt="Linux" title="Linux" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/githubactions/2088FF" alt="GitHub Actions" title="GitHub Actions" height="40" />
-&nbsp;&nbsp;
-<img src="https://cdn.simpleicons.org/caddy/1F88C0" alt="Caddy" title="Caddy" height="40" />
-&nbsp;&nbsp;
+<p align="center">
+    <img src="https://companieslogo.com/img/orig/ORCL-d5a587ae.png?t=1740130451" alt="Oracle Cloud" title="Oracle Cloud" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/ubuntu/E95420" alt="Ubuntu" title="Ubuntu" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/linux/FCC624" alt="Linux" title="Linux" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/githubactions/2088FF" alt="GitHub Actions" title="GitHub Actions" height="40" />
+    &nbsp;&nbsp;
+    <img src="https://cdn.simpleicons.org/caddy/1F88C0" alt="Caddy" title="Caddy" height="40" />
+    &nbsp;&nbsp;
+</p>
 
 ## Installation
 1. Clone the repository
