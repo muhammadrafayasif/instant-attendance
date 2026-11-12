@@ -9,6 +9,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    environment:
+      name: frontend
+      url: https://nedfetch.ddns.net
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,8 +28,6 @@ jobs:
 
       - run: npm run build
         working-directory: frontend
-        env:
-          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
 
       - name: Set up SSH
         run: |

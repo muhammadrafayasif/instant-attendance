@@ -9,6 +9,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    environment:
+      name: backend
+      url: https://nedfetch.ddns.net
+
     steps:
       - uses: actions/checkout@v4
 
